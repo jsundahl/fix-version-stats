@@ -14,6 +14,7 @@ fixVersionIssueKeysNotInQa = []
 fixVersionPointLabelsInQa = []
 fixVersionPointLabelsNotInQa = []
 
+
 def add_fix_version_point(fix_version_dates, fix_version_issue_keys, fix_version_point_labels, change):
     fix_version_dates.append(change['timestamp'])
     fix_version_issue_keys.append(change['issueKey'][0:3])
