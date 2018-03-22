@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from pymongo import MongoClient
+from collections import Counter
 
 client = MongoClient()
 db = client['snitch-db']
@@ -13,6 +14,9 @@ fixVersionIssueKeysInQa = []
 fixVersionIssueKeysNotInQa = []
 fixVersionPointLabelsInQa = []
 fixVersionPointLabelsNotInQa = []
+usersForCount = []
+users = []
+fixVersionChangesPerUser = []
 
 
 def add_fix_version_point(fix_version_dates, fix_version_issue_keys, fix_version_point_labels, change):
@@ -22,10 +26,15 @@ def add_fix_version_point(fix_version_dates, fix_version_issue_keys, fix_version
 
 
 for change in allFixVersionChanges:
+    usersForCount.append(change['user'])
     if change['userIsInQa']:
         add_fix_version_point(fixVersionDatesInQa, fixVersionIssueKeysInQa, fixVersionPointLabelsInQa, change)
     else:
         add_fix_version_point(fixVersionDatesNotInQa, fixVersionIssueKeysNotInQa, fixVersionPointLabelsNotInQa, change)
+
+for user, count in Counter(usersForCount).items():
+    users.append(user)
+    fixVersionChangesPerUser.append(count)
 
 app = dash.Dash()
 
@@ -33,7 +42,7 @@ app.layout = html.Div(children=[
     html.H1(children='Fix Version Stats'),
 
     dcc.Graph(
-        id='example-graph',
+        id='main',
         figure={
             'data': [
                 {
@@ -57,6 +66,22 @@ app.layout = html.Div(children=[
             ],
             'layout': {
                 'title': 'Fix Version Changes Timeline'
+            }
+        }
+    ),
+
+    dcc.Graph(
+        id='secondary',
+        figure={
+            'data': [
+                {
+                    'x': users,
+                    'y': fixVersionChangesPerUser,
+                    'type': 'bar'
+                }
+            ],
+            'layout': {
+                'title': '# of Fix Version Changes By User'
             }
         }
     )
