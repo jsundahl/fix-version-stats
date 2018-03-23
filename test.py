@@ -51,6 +51,7 @@ app.layout = html.Div(children=[
                     'text': fixVersionPointLabelsInQa,
                     'type': 'scatter',
                     'mode': 'markers',
+                    'name': 'QA'
                 },
                 {
                     'x': fixVersionDatesNotInQa,
@@ -61,7 +62,8 @@ app.layout = html.Div(children=[
                     'marker': {
                         'size': 5,
                         'color': 'rgba(255, 182, 193, .9)',
-                    }
+                    },
+                    'name': 'non-QA plebs'
                 }
             ],
             'layout': {
