@@ -38,6 +38,23 @@ for user, count in Counter(usersForCount).items():
 
 app = dash.Dash()
 
+sprintLines = []
+sprintLineDates = ['2018-03-22', '2018-03-2', '2018-02-18']  # , '2018-01-18', '2018-01-02', '2017-12-4']
+
+for date in sprintLineDates:
+    sprintLines.append({
+            'type': 'line',
+            'x0': date,
+            'x1': date,
+            'y0': 0,
+            'y1': 3,
+            'line': {
+                'color': 'rgb(152, 159, 170)',
+                'width': 1,
+                'dash': 'dot'
+            },
+        })
+
 app.layout = html.Div(children=[
     html.H1(children='Fix Version Stats'),
 
@@ -67,7 +84,8 @@ app.layout = html.Div(children=[
                 }
             ],
             'layout': {
-                'title': 'Fix Version Changes Timeline'
+                'title': 'Fix Version Changes Timeline',
+                'shapes': sprintLines
             }
         }
     ),
